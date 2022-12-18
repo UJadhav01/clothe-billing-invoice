@@ -1,0 +1,76 @@
+body{
+  background-color: transparent;
+  overflow: hidden;
+}
+nav{
+  font-size: 22px;
+  text-transform: capitalize;
+  font-style: italic;
+  display: flex;
+  flex-direction: row;
+  color: white;
+  top: 0;
+  width: 100%;
+  padding: 5px;
+  height: 7vh;
+  position: fixed;
+z-index: 1;
+  background-color: lightslategray;
+}
+
+#printBtn{
+  background-color: transparent;
+  margin-left: 350px;
+  border: 1px solid white;
+  font-size: 22px;
+  padding: 5px;
+
+}
+
+
+form{
+  background-color: transparent;
+  top: 7vh;
+  padding: 30px;
+}
+.card{
+  border: 1px solid white;
+  color: white;
+  background-color: transparent;
+}
+.maindiv{
+margin-left: 300px;
+margin-top: 30px;
+
+top: 7vh;
+background-color: transparent;
+color: white;
+
+
+}
+
+table{
+  border: 1px solid white;
+color: white;
+}
+
+
+
+.form-control{
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+
+}
+
+#addP{
+  width: 50px;
+  background-color: transparent;
+  border: 1px solid white;
+  font-size: 25px;
+  height: fit-content;
+}
+
+
+
+

@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */
+body{
+  background-image: url('https://cdn.pixabay.com/photo/2015/09/11/00/33/creamy-935155__340.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  position:relative;
+}
+

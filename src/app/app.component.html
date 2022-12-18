@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title>shopping Bill Receipt</title>
+</head>
+<body>
+  <nav>
+
+      <span [innerHTML]="emoji" style="margin-left: 35%;"> </span>
+      <span>Clothing bill generator</span>
+      <span [innerHTML]="emoji2"></span>
+
+
+        <button
+          id="printBtn"
+          type="submit"
+          class="btn btn-success btn-lg"
+          (click)="billingForm.valid ? createPDF('print') : ''"
+        >
+          Print shopping Bill
+        </button>
+
+  </nav>
+
+
+  <form #billingForm="ngForm">
+    <div class="maindiv pt-3">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="card border-primary">
+            <div class="card-body">
+              <h4 class="card-title">Customer Details :</h4>
+
+              <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="name">Customer Name :</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="customerName"
+                      id="customerName"
+                      [(ngModel)]="billReceipt.customerName"
+                      #customerName="ngModel"
+                      required
+                    />
+                </div>
+                <span class="text-danger"
+                *ngIf="customerName.invalid && (customerName.touched || billingForm.submitted) ">
+                  <span *ngIf="customerName?.errors.required">
+                    Please enter customer name...
+                  </span>
+                </span>
+              </div>
+
+                <div class="row">
+                <div class="col-md-6 mt-2">
+
+                  <div class="form-group">
+                    <label for="phoneNo">Mobile No.</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      name="customerPhoneNo"
+                      id="customerPhoneNo"
+
+                      [(ngModel)]="billReceipt.customerPhoneNo"
+                      #customerPhoneNo="ngModel"
+
+                      pattern="^((\\+91-?)|0)?[0-9]{10}$"
+                      required
+                    />
+
+                    <span class="text-danger"
+                    *ngIf="customerPhoneNo.invalid && (customerPhoneNo.touched || billingForm.submitted) ">
+                      <span *ngIf="customerPhoneNo?.errors.required">
+                        Please enter customer mobile number
+                      </span>
+                      <span class="text-danger"
+                      *ngIf="customerPhoneNo?.errors.pattern && !customerPhoneNo==''">
+                        Mobile number must be 10 digits
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                  <div class="form-group col-md-6 mt-2">
+                    <label for="email">Email ID :</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="customerEmail"
+                      id="customerEmail"
+                      #customerEmail="ngModel"
+                      [(ngModel)]="billReceipt.customerEmail"
+                      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-z]+$"
+                    required
+                    />
+                    <span class="text-danger"
+                    *ngIf="customerEmail.invalid && (customerEmail.touched || billingForm.submitted) ">
+                      <span *ngIf="customerEmail?.errors.required">
+                        Please enter valid email
+                      </span>
+                      <span class="text-danger"
+                      *ngIf="customerEmail?.errors.pattern && !customerEmail==''">
+                      Please enter valid email
+                    </span>
+                    </span>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="card border-primary mt-2">
+            <div class="card-body">
+              <h4 class="card-title">Customer Address :</h4>
+
+              <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="name">Customer address :</label>
+                    <textarea
+                    class="form-control"
+                    name="customerAddress"
+                    id="customerAddress"
+                    row="3"
+
+                    [(ngModel)]="billReceipt.customerAddress"
+                    #customerAddress="ngModel"
+
+                    required
+                  >
+                  </textarea>
+                  <span class="text-danger"
+                  *ngIf="customerAddress.invalid && (customerAddress.touched || billingForm.submitted) ">
+                    <span *ngIf="customerAddress?.errors.required">
+                      Please enter customer address
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-primary mt-2">
+            <div class="card-body">
+              <h4 class="card-title d-flex justify-content-between">
+                Order Details :
+                <button
+                id="addP"
+                  type="button"
+                  class="btn btn-success"
+                  (click)="addProductDetails()"
+                >
+                  +
+                </button>
+              </h4>
+              <div class="row">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th width="130px">Product Name</th>
+                      <th width="130px">Product Price</th>
+                      <th width="130px">Product Quantity </th>
+                      <th width="130px">Product Amount</th>
+                      <th width="30px"></th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let productDetail of billReceipt.productsData;
+                        let i = index
+                      "
+                    >
+                      <td scope="row">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="productName{{ i }}"
+
+                          id="productName"
+                          [(ngModel)]="productDetail.productName"
+                          #productName="ngModel"
+
+                          required
+                        />
+                        <span class="text-danger"
+                  *ngIf="productName.invalid && (productName.touched || billingForm.submitted) ">
+                    <span *ngIf="productName?.errors.required">
+                      Please enter product name
+                    </span>
+                  </span>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="form-control"
+                          name="ProductPrice{{ i }}"
+                          id="ProductPrice"
+
+                          [(ngModel)]="productDetail.productPrice"
+                          #ProductPrice="ngModel"
+
+                          required
+                        />
+                        <span class="text-danger"
+                        *ngIf="ProductPrice.invalid && (ProductPrice.touched || billingForm.submitted) ">
+                          <span *ngIf="ProductPrice?.errors.required">
+                            Please enter product price
+                          </span>
+                        </span>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="form-control"
+                          name="productQuantity{{ i }}"
+                          id="productQuantity"
+
+                          [(ngModel)]="productDetail.productQuantity"
+                          #productQuantity="ngModel"
+
+                          required
+                        />
+
+                        <span class="text-danger"
+                        *ngIf="productQuantity.invalid && (productQuantity.touched || billingForm.submitted) ">
+                          <span *ngIf="productQuantity?.errors.required">
+                            Please enter product quantity
+                          </span>
+                        </span>
+                      </td>
+                      <td>
+                        <span>
+                          {{
+                            productDetail.productPrice *
+                            productDetail.productQuantity || ""
+                          }}
+                        </span>
+
+                      </td>
+                      <td style="text-align: center;"> <i class="fa fa-trash fa-lg" (click)="onRemove(i)"></i></td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+    </div>
+    </div>
+  </form>
+
+</body>
+</html>
